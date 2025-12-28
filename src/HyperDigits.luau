@@ -19,9 +19,31 @@ Current Limit is 10^^^^^10 aka heptation. Current normal operation(add/sub/mul/d
 HyperDigits DOCUMENTATION: https://arc.is-a.dev/HyperDigits
 
 AlyaNum Creator: evilbocchi | https://github.com/evilbocchi
-HyperDigits Maintainer: Arc(windsom) | https://github.com/wiindsom
+HyperDigits Maintainer: Arc(wiindsom) | https://github.com/wiindsom
 
 ]]
+
+--[=[
+        @class Public API
+
+        This page documents constructors and methods exposed to the returned HyperDigits class,
+        documenting only the most-used/recommended methods.
+
+        All methods that take a `number` argument accept:
+        - `number`
+        - `BaseHyperDigits` table
+        - `HyperDigits`
+
+        Operator notes:
+        -  Metamethods are implemented: `+, -, /, *, ^, %` and comparisons: `<, >, <=, >=, ==`
+
+        Percent notes:
+        - Values created by `fromPercent` are converted into their decimal format.
+        - Passing a percent into operations should work:
+            HyperDigits.fromPercent(10) + HyperDigits.new(10)
+            is equivalent to
+            0.1 + 10
+]=]
 
 local HttpService = game:GetService("HttpService")
 
@@ -146,6 +168,13 @@ function fix(number: BaseHyperDigits): HyperDigits
 	return setmetatable(number, HyperDigits)
 end
 
+--[=[
+        Creates a new `HyperDigits` from a number or BaseHyperDigits.
+
+        @within Public API
+        @param number number | BaseHyperDigits
+        @return HyperDigits
+]=]
 function HyperDigits.new(number: number | BaseHyperDigits): HyperDigits
 	if type(number) == "number" then
 		if number == HUGE then
@@ -334,6 +363,14 @@ function abs(self: HyperDigits): HyperDigits
 	}, HyperDigits)
 end
 
+--[=[
+        Converts an Onoe-style value.
+        Inherited from AlyaNum.
+
+        @within Public API
+        @param onoeNum { mantissa: number, exponent: number } & BaseHyperDigits
+        @return BaseHyperDigits
+]=]
 function HyperDigits.fromOnoe(onoeNum: { mantissa: number, exponent: number } & BaseHyperDigits): HyperDigits
 	local number: BaseHyperDigits
 	if onoeNum.sign ~= nil then
@@ -344,6 +381,14 @@ function HyperDigits.fromOnoe(onoeNum: { mantissa: number, exponent: number } & 
 	return fix(number)
 end
 
+--[=[
+        Converts an OmegaNum-style value into `HyperDigits`.
+        Inherited from AlyaNum.
+
+        @within Public API
+        @param onum unknown
+        @return HyperDigits
+]=]
 function HyperDigits.fromOmega(onum: unknown): HyperDigits
 	local number: BaseHyperDigits
 	if onum.sign ~= nil then
@@ -1608,6 +1653,21 @@ local function parseBigIntStringToHyper(s: string): HyperDigits
 	})
 end
 
+--[=[
+        Parses a string into `HyperDigits`.
+
+        Supports:
+        - Plain numbers: `"123"`, `"-123"`
+        - Scientific: `"1e3"`, `"1e-3"`
+        - Scientific-chain: `"1e1e123"`
+        - Suffix: `"1.23K"` --Currently only works up to No and does NOT support saberSuffixes.
+
+        If parse fails, returns 0.
+
+        @within Public API
+        @param str string
+        @return HyperDigits
+]=]
 function HyperDigits.fromString(str: string): HyperDigits
 	if str == "[0]" then
 		return ZERO
@@ -1733,11 +1793,27 @@ function HyperDigits.fromString(str: string): HyperDigits
 	return HyperDigits.new(tonumber(str) or 0)
 end
 
+--[=[
+        Converts `self` into table format. Used for datastore savings/structure view.
+
+        @within Public API
+        @param self HyperDigits
+        @return BaseHyperDigits
+]=]
 function HyperDigits.toBase(self: HyperDigits): BaseHyperDigits
 	return setmetatable(self, nil) :: BaseHyperDigits
 end
 
-function HyperDigits.getPercentage(numerator: HyperDigits, denominator: HyperDigits)
+--[=[
+        Computes a clamped fraction: `numerator/denominator` in `[0, 1]`.
+        Rounds to 0.001.
+
+        @within Public API
+        @param numerator HyperDigits
+        @param denominator HyperDigits
+        @return HyperDigits
+]=]
+function HyperDigits.getPercentage(numerator: HyperDigits, denominator: HyperDigits): HyperDigits
 	if denominator.sign == 0 or denominator.exponent == HUGE then
 		return HyperDigits.new(0)
 	end
@@ -1750,6 +1826,18 @@ function HyperDigits.getPercentage(numerator: HyperDigits, denominator: HyperDig
 	return rounded
 end
 
+--[=[
+        Creates a fractional value from a percent input.
+        
+        Ex:
+        - `fromPercent(12)` -> 0.12
+        - `fromPercent("12.3%")` -> 0.123
+
+        @within Public API
+        @param numerator HyperDigits
+        @param denominator HyperDigits
+        @return HyperDigits
+]=]
 function HyperDigits.fromPercent(percent: string | number): HyperDigits
 	if type(percent) == "number" then
 		local num = HyperDigits.new(percent):div(HyperDigits.new(100))
@@ -1768,6 +1856,14 @@ function HyperDigits.fromPercent(percent: string | number): HyperDigits
 	return HyperDigits.new(0)
 end
 
+--[=[
+        Formats a fractional value as a percent string.
+        Relative to: PERCENT_DECIMAL_POINTS
+
+        @within Public API
+        @param number HyperDigits
+        @return string
+]=]
 function HyperDigits.toPercent(number: HyperDigits): string
 	local percentValue = number:mul(HyperDigits.new(100))
 	local numValue = percentValue:toNumber()
@@ -1779,23 +1875,59 @@ function HyperDigits.toPercent(number: HyperDigits): string
 	end
 end
 
+--[=[
+        Alias of `fromString()` for scientific inputs.
+
+        @within Public API
+        @param str string
+        @return HyperDigits
+]=]
 function HyperDigits.fromScientific(str: string): HyperDigits
 	return HyperDigits.fromString(str)
 end
 
+--[=[
+        Overrides the suffix table used by `toSuffix()` and suffix parsing.
+        No clue why you would wanna override that but sure.
+
+        @within Public API
+        @param newSuffixes table
+]=]
 function HyperDigits.changeSuffixes(newSuffixes: typeof(suffixes))
 	suffixes = newSuffixes
 end
 
+--[=[
+        Sets decimal places used in formatted output.
+
+        @within Public API
+        @param decimalPoints number
+]=]
 function HyperDigits.changeDecimalPoints(decimalPoints: number)
 	DECIMAL_POINTS = decimalPoints
 	DP_OFFSET = math.pow(10, DECIMAL_POINTS)
 end
 
+--[=[
+        Sets the default abbreivation mode used by `toString()`:
+        - `"suffix"`
+        - `"scientific"`
+        - `"saber"`
+
+        @within Public API
+        @param mode "suffix" | "scientific" | "saber"
+]=]
 function HyperDigits.changeDefaultAbbreviation(mode: "suffix" | "scientific" | "saber")
 	DEFAULT_ABBREVIATION = mode
 end
 
+--[=[
+        Lossy order-preserving encode into a single roblox number for leaderboard/ranking usage.
+
+        @within Public API
+        @param self HyperDigits
+        @return number
+]=]
 function HyperDigits.lbencode(self: HyperDigits): number
 	if self.sign == 0 then
 		return 0
@@ -1856,6 +1988,13 @@ function HyperDigits.lbencode(self: HyperDigits): number
 	return 0
 end
 
+--[=[
+        Decodes a value produced by `lbdecode()` into an approximate `HyperDigits`.
+
+        @within Public API
+        @param int number
+        @return HyperDigits
+]=]
 function HyperDigits.lbdecode(int: number): HyperDigits
 	if int == 0 then
 		return ZERO
@@ -1942,6 +2081,18 @@ end
 
 HyperDigits.fix = fix
 
+--[=[
+        Adds `number` to `self`.
+
+        Percent behavior:
+        - If `number` is a percent, this applies `self + (self * number)`.
+
+        @method add
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.add = function(self: HyperDigits, number: Number)
 	local num = HyperDigits.new(number)
 
@@ -1958,6 +2109,18 @@ HyperDigits.add = function(self: HyperDigits, number: Number)
 	return add(self, num)
 end
 
+--[=[
+        Subtracts `number` from `self`.
+
+        Percent behavior:
+        - If `number` is a percent, this applies: `self - (self * number)`.
+
+        @method sub
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.sub = function(self: HyperDigits, number: Number)
 	local num = HyperDigits.new(number)
 
@@ -1974,6 +2137,15 @@ HyperDigits.sub = function(self: HyperDigits, number: Number)
 	return add(self, unary(num))
 end
 
+--[=[
+        Multiplies `self` by `number`.
+
+        @method mul
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.mul = function(self: HyperDigits, number: Number)
 	local num = HyperDigits.new(number)
 
@@ -1987,6 +2159,15 @@ HyperDigits.mul = function(self: HyperDigits, number: Number)
 	return mul(self, num)
 end
 
+--[=[
+        Divides `self` by `number`.
+
+        @method div
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.div = function(self: HyperDigits, number: Number)
 	local num = HyperDigits.new(number)
 
@@ -2000,6 +2181,15 @@ HyperDigits.div = function(self: HyperDigits, number: Number)
 	return div(self, num)
 end
 
+--[=[
+        Raises `self` to the power `number`.
+
+        @method pow
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.pow = function(self: HyperDigits, number: Number)
 	local num = HyperDigits.new(number)
 
@@ -2013,6 +2203,18 @@ HyperDigits.pow = function(self: HyperDigits, number: Number)
 	return pow(self, num)
 end
 
+--[=[
+        Returns `self % number`.
+
+        Percent behavior:
+        - If `number` is a percent, this applies: `self % (self * number)`.
+
+        @method mod
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.mod = function(self: HyperDigits, number: Number)
 	local num = HyperDigits.new(number)
 
@@ -2029,146 +2231,472 @@ HyperDigits.mod = function(self: HyperDigits, number: Number)
 	return mod(self, num)
 end
 
+--[=[
+        Takes the `number`-th root of `self`.
+
+        @method root
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.root = function(self: HyperDigits, number: Number)
 	return root(self, HyperDigits.new(number))
 end
 
+--[=[
+        Returns true if `self` and `number` are exactly equal in representation.
+
+        @method equals
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.equals = function(self: HyperDigits, number: Number)
 	return equals(self, HyperDigits.new(number))
 end
 
+--[=[
+        Returns true if `self < number`.
+
+        @method lessThan
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.lessThan = function(self: HyperDigits, number: Number)
 	return lessThan(self, HyperDigits.new(number))
 end
 
+--[=[
+        Returns true if `self <= number`.
+
+        @method lessEquals
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.lessEquals = function(self: HyperDigits, number: Number)
 	return lessEquals(self, HyperDigits.new(number))
 end
 
+--[=[
+        Returns true if `self > number`.
+
+        @method moreThan
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.moreThan = function(self: HyperDigits, number: Number)
 	return moreThan(self, HyperDigits.new(number))
 end
 
+--[=[
+        Returns true if `self >= number`.
+
+        @method moreEquals
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.moreEquals = function(self: HyperDigits, number: Number)
 	return moreEquals(self, HyperDigits.new(number))
 end
 
+--[=[
+        Compares `self` and `number`.
+
+        Returns:
+        - `1` if `self > number`
+        - `0` if equal
+        - `-1` if `self < number`
+
+        @method compare
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.compare = function(self: HyperDigits, number: Number)
 	return compare(self, HyperDigits.new(number))
 end
 
+--[=[
+        Returns the absolute value of `self`.
+
+        @method abs
+        @within Public API
+        @param self HyperDigits
+        @return HyperDigits
+]=]
 HyperDigits.abs = function(self: HyperDigits)
 	return abs(HyperDigits.new(self))
 end
 
+--[=[
+        Base-10 algorithm.
+
+        For `self <= 0`, returns 0.
+
+        @method log10
+        @within Public API
+        @param self HyperDigits
+        @return HyperDigits
+]=]
 HyperDigits.log10 = function(self: HyperDigits)
 	return log10(HyperDigits.new(self))
 end
 
+--[=[
+        Logarithm of `self` in the given base.
+
+        @method log
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.log = function(self: HyperDigits, number: Number)
 	return log(self, HyperDigits.new(number))
 end
 
+--[=[
+        Floors `self` when safely representable; otherwise returns `self`.
+
+        @method floor
+        @within Public API
+        @param self HyperDigits
+        @return HyperDigits
+]=]
 HyperDigits.floor = function(self: HyperDigits)
 	return floor(HyperDigits.new(self))
 end
 
+--[=[
+        Rounds `self` when safely representable; otherwise returns `self`.
+
+        @method round
+        @within Public API
+        @param self HyperDigits
+        @return HyperDigits
+]=]
 HyperDigits.round = function(self: HyperDigits)
 	return round(HyperDigits.new(self))
 end
 
+--[=[
+        Ceils `self` when safely representable; otherwise returns `self`.
+
+        @method ceil
+        @within Public API
+        @param self HyperDigits
+        @return HyperDigits
+]=]
 HyperDigits.ceil = function(self: HyperDigits)
 	return ceil(HyperDigits.new(self))
 end
 
+--[=[
+        Returns true if `self` is an integer.
+
+        For values beyond safe integer resolution, automatically returns true.
+
+        @method isInteger
+        @within Public API
+        @param self HyperDigits
+        @return HyperDigits
+]=]
 HyperDigits.isInteger = function(self: HyperDigits)
 	return isInteger(HyperDigits.new(self))
 end
 
+--[=[
+        Returns the reciprocal: `1/self`.
+
+        @method reciprocal
+        @within Public API
+        @param self HyperDigits
+        @return HyperDigits
+]=]
 HyperDigits.reciprocal = function(self: HyperDigits)
 	return reciprocal(HyperDigits.new(self))
 end
 
+--[=[
+        Lambert W function: `W(self)`.
+        If you lowkey wanna learn more: https://en.wikipedia.org/wiki/Lambert_W_function
+        
+        @method lambertw
+        @within Public API
+        @param self HyperDigits
+        @return HyperDigits
+]=]
 HyperDigits.lambertw = function(self: HyperDigits)
 	return lambertw(HyperDigits.new(self))
 end
 
+--[=[
+        Super-logarithm with given base(used for tetration).
+        If you lowkey wanna learn more: https://andydude.github.io/tetration/archives/tetration2/slog.html
+
+        Returns `nil` if the iteration fails to unite.
+        
+        @method slog
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.slog = function(self: HyperDigits, number: Number)
 	return slog(self, HyperDigits.new(number))
 end
 
+--[=[
+        Pentation-logarithm with given base(used for pentation).
+        If you lowkey wanna learn more: https://oeis.org/wiki/Penta-logarithms
+
+        Returns `nil` if the iteration fails to unite.
+        
+        @method pentlog
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.pentlog = function(self: HyperDigits, number: Number)
 	return pentlog(self, HyperDigits.new(number))
 end
 
+--[=[
+        Hexation-logarithm with given base(used for pentation).
+        If you lowkey wanna learn more: https://oeis.org/wiki/Penta-logarithms
+
+        Returns `nil` if the iteration fails to unite.
+        
+        @method hextlog
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.hextlog = function(self: HyperDigits, number: Number)
 	return hextlog(self, HyperDigits.new(number))
 end
 
+--[=[
+        Tetration `self ^^ number`.
+        
+        @method tet
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.tet = function(self: HyperDigits, number: Number)
 	return tetrate(self, HyperDigits.new(number))
 end
 
+--[=[
+        Pentation `self ^^^ number`.
+        
+        @method pent
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.pent = function(self: HyperDigits, number: Number)
 	return pentate(self, HyperDigits.new(number))
 end
 
+--[=[
+        Hexation `self ^^^^ number`.
+        
+        @method hext
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.hext = function(self: HyperDigits, number: Number)
 	return hexate(self, HyperDigits.new(number))
 end
 
+--[=[
+        Returns the additive inverse: `-self`.
+
+        @method unary
+        @within Public API
+        @param self HyperDigits
+        @return HyperDigits
+]=]
 HyperDigits.unary = function(self: HyperDigits)
 	return unary(HyperDigits.new(self))
 end
 
+--[=[
+        Returns the minimum of `self` and `number`.
+        
+        @method min
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.min = function(self: HyperDigits, number: Number)
 	return min(self, HyperDigits.new(number))
 end
 
+--[=[
+        Returns the maximum of `self` and `number`.
+        
+        @method max
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.max = function(self: HyperDigits, number: Number)
 	return max(self, HyperDigits.new(number))
 end
 
+--[=[
+        Returns `(min, max)` for `self` and `number`.
+        
+        @method max
+        @within Public API
+        @param self HyperDigits
+        @param number Number
+        @return HyperDigits
+]=]
 HyperDigits.minmax = function(self: HyperDigits, number: Number)
 	return minmax(self, HyperDigits.new(number))
 end
 
+--[=[
+        Primary string formatter. Automatically picks appropriate abbreviations depending on magnitude.
+        
+        @method toString
+        @within Public API
+        @param self Number
+        @return HyperDigits
+]=]
 HyperDigits.toString = function(self: Number)
 	return toString(HyperDigits.new(self))
 end
 
+--[=[
+        Returns Serika stuff.
+        Inherited from AlyaNum.
+        
+        @method toSerika
+        @within Public API
+        @param self Number
+        @return HyperDigits
+]=]
 HyperDigits.toSerika = function(self: Number)
 	return toSerika(HyperDigits.new(self))
 end
 
+--[=[
+        Converts to real `number`, although may return inf for extreme values.
+        
+        @method toNumber
+        @within Public API
+        @param self Number
+        @return HyperDigits
+]=]
 HyperDigits.toNumber = function(self: Number)
 	return toNumber(HyperDigits.new(self))
 end
 
+--[=[
+        Formats using standard suffixes: `K, M, B, T, etc` when available.
+        
+        @method toSuffix
+        @within Public API
+        @param self Number
+        @return HyperDigits
+]=]
 HyperDigits.toSuffix = function(self: Number)
 	return toSuffix(HyperDigits.new(self))
 end
 
+--[=[
+        Formats using slightly modified suffixes from the roblox game `Saber Simulator`.
+        Game link: https://rblx.games/3823781113
+        
+        @method toSaberSuffix
+        @within Public API
+        @param self Number
+        @return HyperDigits
+]=]
 HyperDigits.toSaberSuffix = function(self: Number)
 	return toSaberSuffix(HyperDigits.new(self))
 end
 
-HyperDigits.toScientificChain = function(self: Number)
-	return toScientificChain(self)
-end
-
+--[=[
+        Formats as scientific notation; may switch to scientific-chain for extreme values.
+        
+        @method toScientific
+        @within Public API
+        @param self Number
+        @return HyperDigits
+]=]
 HyperDigits.toScientific = function(self: Number)
 	return toScientific(HyperDigits.new(self))
 end
 
+--[=[
+        Formats as scientific-chain: `"1e"` followed by a compact exponent string.
+        
+        @method toScientificChain
+        @within Public API
+        @param self Number
+        @return HyperDigits
+]=]
+HyperDigits.toScientificChain = function(self: Number)
+	return toScientificChain(self)
+end
+
+--[=[
+        Formats as e-chain: `e...x`; may promote to Ent for really really extreme values.
+        
+        @method toEChain
+        @within Public API
+        @param self Number
+        @return HyperDigits
+]=]
 HyperDigits.toEChain = function(self: Number)
 	return toEChain(HyperDigits.new(self))
 end
 
+--[=[
+        Formats as Ent: `E(k)<x>`; may promote to HyperE for REALLY REALLY REALLY extreme values.
+        
+        @method toEnt
+        @within Public API
+        @param self Number
+        @return HyperDigits
+]=]
 HyperDigits.toEnt = function(self: Number)
 	return toEnt(HyperDigits.new(self))
 end
 
+--[=[
+        Formats as hyper-E with layered `#` parts.
+        
+        @method toHyperE
+        @within Public API
+        @param self Number
+        @return HyperDigits
+]=]
 HyperDigits.toHyperE = function(self: Number)
 	return toHyperE(HyperDigits.new(self))
 end
@@ -2199,11 +2727,46 @@ HyperDigits.__concat = function(self: HyperDigits, value: any): HyperDigits
 	return HyperDigits.toString(self)..value
 end
 
+--[=[
+        @within Public API
+        @prop GOOGOL
+        Represents 10^100
+]=]
 HyperDigits.GOOGOL = HyperDigits.new(10e100)
+
+--[=[
+        @within Public API
+        @prop GOOGOLPLEX HyperDigits
+        Represents 10^(10^100)
+]=]
 HyperDigits.GOOGOLPLEX = HyperDigits.new(10):pow(HyperDigits.GOOGOL)
+
+--[=[
+        @within Public API
+        @prop GOOGOLPLEXPLEX HyperDigits
+        Represents 10^(10^(10^100))
+]=]
 HyperDigits.GOOGOLPLEXPLEX = HyperDigits.new(10):pow(HyperDigits.GOOGOLPLEX)
+
+--[=[
+        @within Public API
+        @prop TRITRI HyperDigits
+        Represents some already really big number, but below tetration.
+]=]
 HyperDigits.TRITRI = HyperDigits.new({ sign = 1, multiplicand = 3638334640023.778, exponent = 7625597484984, tetrate = 0, pentate = 0, hexate = 0, heptate = 0 })
+
+--[=[
+        @within Public API
+        @prop TRITET HyperDigits
+        Represents some already really big number WITH tetration.
+]=]
 HyperDigits.TRITET = HyperDigits.new({ sign = 1, multiplicand = 153.906997547968, exponent = 2, tetrate = 2, pentate = 2, hexate = 0, heptate = 0 })
+
+--[=[
+        @within Public API
+        @prop GRAHAM1 HyperDigits
+        A number possibly beyond hyperverse level. Still below the TREE function.
+]=]
 HyperDigits.GRAHAM1 = HyperDigits.new({ sign = 1, multiplicand = 3638334640023.778, exponent = 7625597484984, tetrate = 0, pentate = 1, hexate = 0, heptate = 0 })
 
 export type HyperDigits = typeof(setmetatable({} :: BaseHyperDigits, HyperDigits))
