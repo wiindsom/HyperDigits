@@ -1,0 +1,15 @@
+gitRepoUrl = "https://github.com/wiindsom/HyperDigits"
+gitSourceBranch = "main"
+
+[home]
+enabled = true
+includeReadme = false
+
+[footer]
+style = "dark"
+copyright = "Fully Open Source Under The MIT License."
+
+[docusaurus]
+title = "HyperDigits"
+tagline = "A bignum library forked from"
+favicon = "/favicon.ico"
