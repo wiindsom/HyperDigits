@@ -91,7 +91,7 @@ function HomepageHeader() {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        wiindsom
+                        Arc
                     </a>{" "}
                     +{" "}
                     <a

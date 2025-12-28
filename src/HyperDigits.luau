@@ -16,14 +16,11 @@ Original is AlyaNum. Fork named to HyperDigits as an extension using the origina
 Implements a number system with support for hyperoperations (tetration, pentation, etc.) and extremely large values.
 Current Limit is 10^^^^^10 aka heptation. Current normal operation(add/sub/mul/div) limit is 1e1e308 or 10^(10^308).
 
+HyperDigits DOCUMENTATION: https://arc.is-a.dev/HyperDigits
+
 AlyaNum Creator: evilbocchi | https://github.com/evilbocchi
 HyperDigits Maintainer: Arc(windsom) | https://github.com/wiindsom
 
-What this version extends from the original:
-> Support for percentages via fromPercentage + toPercent
-> Custom Short-Suffix Support(Mirror copy from Saber Simulator)
-> Customizable Number Cap + Cap Message
-> Smooth Automatic Abbreviation Conversions(Only if they hit their own limit)
 ]]
 
 local HttpService = game:GetService("HttpService")
