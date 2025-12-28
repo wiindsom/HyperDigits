@@ -1,7 +1,7 @@
 --!optimize 2
 --!native
 --!nocheck
--- selene: allow(shadowing)
+--# selene: allow(shadowing)
 
 --[[
 
