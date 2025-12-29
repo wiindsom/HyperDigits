@@ -17,7 +17,7 @@ onBrokenMarkdownLinks = "warn"
 favicon = "/favicon.ico"
 
 [[navbar.items]]
-to = "/docs"
+to = "/docs/intro"
 label = "Docs"
 position = "left"
 
@@ -27,6 +27,6 @@ label = "Features"
 position = "left"
 
 [[navbar.items]]
-to = "/api"
+to = "/api/Public"
 label = "API"
 position = "left"
