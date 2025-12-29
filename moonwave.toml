@@ -12,4 +12,11 @@ copyright = "Fully Open Source Under The MIT License."
 [docusaurus]
 title = "HyperDigits"
 tagline = "A bignum library forked from"
+onBrokenLinks = "throw"
+onBrokenMarkdownLinks = "warn"
 favicon = "/favicon.ico"
+
+[[navbar.items]]
+href = "https://roblox.com"
+label = "Something Else"
+position = "right"

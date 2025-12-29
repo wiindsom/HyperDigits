@@ -1,12 +1,12 @@
 /* stylelint-disable docusaurus/copyright-header */
 
 /**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
+* CSS files with the .module.css suffix will be treated as CSS modules
+* and scoped locally.
+*/
 
 .heroBanner {
-    padding: 4rem 0;
+    padding: 0;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -14,12 +14,40 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+
+    display: flex;
+    align-items: center;
+
+    min-height: calc(100vh - var(--ifm-navbar-height) - var(--homepage-footer-height, 0px));
 }
 
-@media screen and (max-width: 966px) {
-    .heroBanner {
-        padding: 2rem;
-    }
+.heroContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3.5rem 1.5rem;
+}
+
+.heroImageWrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.75rem 0 0.5rem;
+}
+
+.heroImage {
+    width: 260px;
+    max-width: 60vw;
+    height: auto;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(139, 139, 139, 0.35);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(2px);
+    user-select: none;
 }
 
 .buttons {
@@ -28,16 +56,13 @@
     justify-content: center;
 }
 
-.features {
+.badges {
     display: flex;
+    gap: 12px;
+    justify-content: center;
     align-items: center;
-    padding: 2rem 0;
-    width: 100%;
-}
-
-.featureSvg {
-    height: 200px;
-    width: 200px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
 }
 
 .titleOnBannerImage {
@@ -55,3 +80,15 @@
     font-weight: 640;
 }
 
+@media screen and (max-width: 966px) {
+    .heroContainer {
+        padding: 2.25rem 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .heroImage {
+        width: 160px;
+        max-width: 70vw;
+    }
+}

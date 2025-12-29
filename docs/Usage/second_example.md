@@ -16,7 +16,6 @@ local a = HyperDigits.new(5)
 local b = HyperDigits.new(10)
 
 print(HyperDigits.getPercentage(5, 10)) --should print 0.5
-
 ```
 
 ---
