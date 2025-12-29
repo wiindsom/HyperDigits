@@ -124,8 +124,8 @@ export default function Home() {
             <Head>
                 <title>HyperDigits</title>
                 <meta property="og:title" content="HyperDigits" />
-                <meta property="og:description" content="Type-Safe, Java-Inspired Data Structures for Roblox." />
-                <meta property="og:image" content="https://wiindsom.github.io/HyperDigits/og-image.jpg" />
+                <meta property="og:description" content="A bignum library for Roblox." />
+                <meta property="og:image" content="https://wiindsom.github.io/HyperDigits/og-image.png" />
                 <meta property="og:site_name" content="wiindsom" />
                 <meta name="theme-color" content="#B19CD7" />
                 <meta name="twitter:card" content="summary_large_image" />
