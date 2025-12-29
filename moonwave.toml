@@ -19,17 +19,17 @@ favicon = "/favicon.ico"
 [docusaurus.themeConfig.navbar]
 title = "HyperDigits"
 
-[[docusaurus.themeConfig.navbar.items]]
+[[navbar.items]]
 to = "/docs/intro"
 label = "Docs"
 position = "left"
 
-[[docusaurus.themeConfig.navbar.items]]
-to = "/features"
+[[navbar.items]]
+href = "https://roblox.com"
 label = "Features"
 position = "left"
 
-[[docusaurus.themeConfig.navbar.items]]
+[[navbar.items]]
 to = "/api/Public"
 label = "API"
 position = "left"
