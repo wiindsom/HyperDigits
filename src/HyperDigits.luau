@@ -24,7 +24,7 @@ HyperDigits Maintainer: Arc(wiindsom) | https://github.com/wiindsom
 ]]
 
 --[=[
-        @class Public API
+        @class Public
 
         This page documents constructors and methods exposed to the returned HyperDigits class,
         documenting only the most-used/recommended methods.
@@ -171,7 +171,7 @@ end
 --[=[
         Creates a new `HyperDigits` from a number or BaseHyperDigits.
 
-        @within Public API
+        @within Public
         @param number number | BaseHyperDigits
         @return HyperDigits
 ]=]
@@ -367,7 +367,7 @@ end
         Converts an Onoe-style value.
         Inherited from AlyaNum.
 
-        @within Public API
+        @within Public
         @param onoeNum { mantissa: number, exponent: number } & BaseHyperDigits
         @return BaseHyperDigits
 ]=]
@@ -385,7 +385,7 @@ end
         Converts an OmegaNum-style value into `HyperDigits`.
         Inherited from AlyaNum.
 
-        @within Public API
+        @within Public
         @param onum unknown
         @return HyperDigits
 ]=]
@@ -1664,7 +1664,7 @@ end
 
         If parse fails, returns 0.
 
-        @within Public API
+        @within Public
         @param str string
         @return HyperDigits
 ]=]
@@ -1796,7 +1796,7 @@ end
 --[=[
         Converts `self` into table format. Used for datastore savings/structure view.
 
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return BaseHyperDigits
 ]=]
@@ -1808,7 +1808,7 @@ end
         Computes a clamped fraction: `numerator/denominator` in `[0, 1]`.
         Rounds to 0.001.
 
-        @within Public API
+        @within Public
         @param numerator HyperDigits
         @param denominator HyperDigits
         @return HyperDigits
@@ -1833,9 +1833,8 @@ end
         - `fromPercent(12)` -> 0.12
         - `fromPercent("12.3%")` -> 0.123
 
-        @within Public API
-        @param numerator HyperDigits
-        @param denominator HyperDigits
+        @within Public
+        @param percent string | number
         @return HyperDigits
 ]=]
 function HyperDigits.fromPercent(percent: string | number): HyperDigits
@@ -1860,7 +1859,7 @@ end
         Formats a fractional value as a percent string.
         Relative to: PERCENT_DECIMAL_POINTS
 
-        @within Public API
+        @within Public
         @param number HyperDigits
         @return string
 ]=]
@@ -1878,7 +1877,7 @@ end
 --[=[
         Alias of `fromString()` for scientific inputs.
 
-        @within Public API
+        @within Public
         @param str string
         @return HyperDigits
 ]=]
@@ -1890,7 +1889,7 @@ end
         Overrides the suffix table used by `toSuffix()` and suffix parsing.
         No clue why you would wanna override that but sure.
 
-        @within Public API
+        @within Public
         @param newSuffixes table
 ]=]
 function HyperDigits.changeSuffixes(newSuffixes: typeof(suffixes))
@@ -1900,7 +1899,7 @@ end
 --[=[
         Sets decimal places used in formatted output.
 
-        @within Public API
+        @within Public
         @param decimalPoints number
 ]=]
 function HyperDigits.changeDecimalPoints(decimalPoints: number)
@@ -1914,7 +1913,7 @@ end
         - `"scientific"`
         - `"saber"`
 
-        @within Public API
+        @within Public
         @param mode "suffix" | "scientific" | "saber"
 ]=]
 function HyperDigits.changeDefaultAbbreviation(mode: "suffix" | "scientific" | "saber")
@@ -1924,7 +1923,7 @@ end
 --[=[
         Lossy order-preserving encode into a single roblox number for leaderboard/ranking usage.
 
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return number
 ]=]
@@ -1991,7 +1990,7 @@ end
 --[=[
         Decodes a value produced by `lbdecode()` into an approximate `HyperDigits`.
 
-        @within Public API
+        @within Public
         @param int number
         @return HyperDigits
 ]=]
@@ -2088,7 +2087,7 @@ HyperDigits.fix = fix
         - If `number` is a percent, this applies `self + (self * number)`.
 
         @method add
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2116,7 +2115,7 @@ end
         - If `number` is a percent, this applies: `self - (self * number)`.
 
         @method sub
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2141,7 +2140,7 @@ end
         Multiplies `self` by `number`.
 
         @method mul
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2163,7 +2162,7 @@ end
         Divides `self` by `number`.
 
         @method div
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2185,7 +2184,7 @@ end
         Raises `self` to the power `number`.
 
         @method pow
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2210,7 +2209,7 @@ end
         - If `number` is a percent, this applies: `self % (self * number)`.
 
         @method mod
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2235,7 +2234,7 @@ end
         Takes the `number`-th root of `self`.
 
         @method root
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2248,7 +2247,7 @@ end
         Returns true if `self` and `number` are exactly equal in representation.
 
         @method equals
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2261,7 +2260,7 @@ end
         Returns true if `self < number`.
 
         @method lessThan
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2274,7 +2273,7 @@ end
         Returns true if `self <= number`.
 
         @method lessEquals
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2287,7 +2286,7 @@ end
         Returns true if `self > number`.
 
         @method moreThan
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2300,7 +2299,7 @@ end
         Returns true if `self >= number`.
 
         @method moreEquals
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2318,7 +2317,7 @@ end
         - `-1` if `self < number`
 
         @method compare
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2331,7 +2330,7 @@ end
         Returns the absolute value of `self`.
 
         @method abs
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return HyperDigits
 ]=]
@@ -2345,7 +2344,7 @@ end
         For `self <= 0`, returns 0.
 
         @method log10
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return HyperDigits
 ]=]
@@ -2357,7 +2356,7 @@ end
         Logarithm of `self` in the given base.
 
         @method log
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2370,7 +2369,7 @@ end
         Floors `self` when safely representable; otherwise returns `self`.
 
         @method floor
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return HyperDigits
 ]=]
@@ -2382,7 +2381,7 @@ end
         Rounds `self` when safely representable; otherwise returns `self`.
 
         @method round
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return HyperDigits
 ]=]
@@ -2394,7 +2393,7 @@ end
         Ceils `self` when safely representable; otherwise returns `self`.
 
         @method ceil
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return HyperDigits
 ]=]
@@ -2408,7 +2407,7 @@ end
         For values beyond safe integer resolution, automatically returns true.
 
         @method isInteger
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return HyperDigits
 ]=]
@@ -2420,7 +2419,7 @@ end
         Returns the reciprocal: `1/self`.
 
         @method reciprocal
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return HyperDigits
 ]=]
@@ -2433,7 +2432,7 @@ end
         If you lowkey wanna learn more: https://en.wikipedia.org/wiki/Lambert_W_function
         
         @method lambertw
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return HyperDigits
 ]=]
@@ -2448,7 +2447,7 @@ end
         Returns `nil` if the iteration fails to unite.
         
         @method slog
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2464,7 +2463,7 @@ end
         Returns `nil` if the iteration fails to unite.
         
         @method pentlog
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2480,7 +2479,7 @@ end
         Returns `nil` if the iteration fails to unite.
         
         @method hextlog
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2493,7 +2492,7 @@ end
         Tetration `self ^^ number`.
         
         @method tet
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2506,7 +2505,7 @@ end
         Pentation `self ^^^ number`.
         
         @method pent
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2519,7 +2518,7 @@ end
         Hexation `self ^^^^ number`.
         
         @method hext
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2532,7 +2531,7 @@ end
         Returns the additive inverse: `-self`.
 
         @method unary
-        @within Public API
+        @within Public
         @param self HyperDigits
         @return HyperDigits
 ]=]
@@ -2544,7 +2543,7 @@ end
         Returns the minimum of `self` and `number`.
         
         @method min
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2557,7 +2556,7 @@ end
         Returns the maximum of `self` and `number`.
         
         @method max
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2570,7 +2569,7 @@ end
         Returns `(min, max)` for `self` and `number`.
         
         @method max
-        @within Public API
+        @within Public
         @param self HyperDigits
         @param number Number
         @return HyperDigits
@@ -2583,7 +2582,7 @@ end
         Primary string formatter. Automatically picks appropriate abbreviations depending on magnitude.
         
         @method toString
-        @within Public API
+        @within Public
         @param self Number
         @return HyperDigits
 ]=]
@@ -2596,7 +2595,7 @@ end
         Inherited from AlyaNum.
         
         @method toSerika
-        @within Public API
+        @within Public
         @param self Number
         @return HyperDigits
 ]=]
@@ -2608,7 +2607,7 @@ end
         Converts to real `number`, although may return inf for extreme values.
         
         @method toNumber
-        @within Public API
+        @within Public
         @param self Number
         @return HyperDigits
 ]=]
@@ -2620,7 +2619,7 @@ end
         Formats using standard suffixes: `K, M, B, T, etc` when available.
         
         @method toSuffix
-        @within Public API
+        @within Public
         @param self Number
         @return HyperDigits
 ]=]
@@ -2633,7 +2632,7 @@ end
         Game link: https://rblx.games/3823781113
         
         @method toSaberSuffix
-        @within Public API
+        @within Public
         @param self Number
         @return HyperDigits
 ]=]
@@ -2645,7 +2644,7 @@ end
         Formats as scientific notation; may switch to scientific-chain for extreme values.
         
         @method toScientific
-        @within Public API
+        @within Public
         @param self Number
         @return HyperDigits
 ]=]
@@ -2657,7 +2656,7 @@ end
         Formats as scientific-chain: `"1e"` followed by a compact exponent string.
         
         @method toScientificChain
-        @within Public API
+        @within Public
         @param self Number
         @return HyperDigits
 ]=]
@@ -2669,7 +2668,7 @@ end
         Formats as e-chain: `e...x`; may promote to Ent for really really extreme values.
         
         @method toEChain
-        @within Public API
+        @within Public
         @param self Number
         @return HyperDigits
 ]=]
@@ -2681,7 +2680,7 @@ end
         Formats as Ent: `E(k)<x>`; may promote to HyperE for REALLY REALLY REALLY extreme values.
         
         @method toEnt
-        @within Public API
+        @within Public
         @param self Number
         @return HyperDigits
 ]=]
@@ -2693,7 +2692,7 @@ end
         Formats as hyper-E with layered `#` parts.
         
         @method toHyperE
-        @within Public API
+        @within Public
         @param self Number
         @return HyperDigits
 ]=]
@@ -2728,42 +2727,42 @@ HyperDigits.__concat = function(self: HyperDigits, value: any): HyperDigits
 end
 
 --[=[
-        @within Public API
-        @prop GOOGOL
+        @within Public
+        @prop GOOGOL HyperDigits
         Represents 10^100
 ]=]
 HyperDigits.GOOGOL = HyperDigits.new(10e100)
 
 --[=[
-        @within Public API
+        @within Public
         @prop GOOGOLPLEX HyperDigits
         Represents 10^(10^100)
 ]=]
 HyperDigits.GOOGOLPLEX = HyperDigits.new(10):pow(HyperDigits.GOOGOL)
 
 --[=[
-        @within Public API
+        @within Public
         @prop GOOGOLPLEXPLEX HyperDigits
         Represents 10^(10^(10^100))
 ]=]
 HyperDigits.GOOGOLPLEXPLEX = HyperDigits.new(10):pow(HyperDigits.GOOGOLPLEX)
 
 --[=[
-        @within Public API
+        @within Public
         @prop TRITRI HyperDigits
         Represents some already really big number, but below tetration.
 ]=]
 HyperDigits.TRITRI = HyperDigits.new({ sign = 1, multiplicand = 3638334640023.778, exponent = 7625597484984, tetrate = 0, pentate = 0, hexate = 0, heptate = 0 })
 
 --[=[
-        @within Public API
+        @within Public
         @prop TRITET HyperDigits
         Represents some already really big number WITH tetration.
 ]=]
 HyperDigits.TRITET = HyperDigits.new({ sign = 1, multiplicand = 153.906997547968, exponent = 2, tetrate = 2, pentate = 2, hexate = 0, heptate = 0 })
 
 --[=[
-        @within Public API
+        @within Public
         @prop GRAHAM1 HyperDigits
         A number possibly beyond hyperverse level. Still below the TREE function.
 ]=]
