@@ -16,20 +16,20 @@ onBrokenLinks = "throw"
 onBrokenMarkdownLinks = "warn"
 favicon = "/favicon.ico"
 
-[docusaurus.navbar]
-disableDefaultItems = true
+[docusaurus.themeConfig.navbar]
+title = "HyperDigits"
 
-[[navbar.items]]
+[[docusaurus.themeConfig.navbar.items]]
 to = "/docs/intro"
 label = "Docs"
 position = "left"
 
-[[navbar.items]]
-href = "/features"
+[[docusaurus.themeConfig.navbar.items]]
+to = "/features"
 label = "Features"
 position = "left"
 
-[[navbar.items]]
+[[docusaurus.themeConfig.navbar.items]]
 to = "/api/Public"
 label = "API"
 position = "left"
