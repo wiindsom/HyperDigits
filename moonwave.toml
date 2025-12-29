@@ -16,6 +16,9 @@ onBrokenLinks = "throw"
 onBrokenMarkdownLinks = "warn"
 favicon = "/favicon.ico"
 
+[docusaurus.navbar]
+disableDefaultItems = true
+
 [[navbar.items]]
 to = "/docs/intro"
 label = "Docs"
