@@ -17,6 +17,16 @@ onBrokenMarkdownLinks = "warn"
 favicon = "/favicon.ico"
 
 [[navbar.items]]
-href = "https://roblox.com"
-label = "Something Else"
-position = "right"
+to = "/docs"
+label = "Docs"
+position = "left"
+
+[[navbar.items]]
+href = "/features"
+label = "Features"
+position = "left"
+
+[[navbar.items]]
+to = "/api"
+label = "API"
+position = "left"
